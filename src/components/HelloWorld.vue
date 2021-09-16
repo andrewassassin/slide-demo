@@ -1,8 +1,7 @@
 <template>
   <div class="slide">
-    <div class="slide-ctrl">
-      <div class="slide-prev" @click="slideCtrl(1)">Prev</div>
-      <div class="slide-next" @click="slideCtrl(-1)">Next</div>
+    <div class="showImg">
+      <img src="" alt="">
     </div>
     <section class="container">
       <div class="row">
@@ -15,6 +14,10 @@
         </transition-group>
       </div>
     </section>
+     <div class="slide-ctrl">
+      <div class="slide-prev" @click="slideCtrl(1)">Prev</div>
+      <div class="slide-next" @click="slideCtrl(-1)">Next</div>
+    </div>
   </div>
 </template>
 
@@ -43,7 +46,7 @@ export default {
       let obj = {};
       obj.id = i;
       obj.ref = i % this.welfare.length;
-      console.log('obj',obj)
+      // console.log('obj',obj)
       this.slideData.push(obj);
     }
   },
@@ -67,19 +70,27 @@ export default {
       window.clearInterval(this.timer);
     },
     // 既然上面call slideCtrl帶1進去，為何這邊強制slidesToShow = 1
-    slideCtrl(slidesToShow = 1) {
+    slideCtrl(slidesToShow=1) {
+    //  console.log('slidesToShow',slidesToShow)
+      // console.log('this.clickWait',this.clickWait)
       if (this.clickWait) {
         return;
       }
       this.stopTime();
       this.clickWait = true;
+      //  console.log('slideData',this.slideData)
       if (slidesToShow > 0) {
+        // 回傳移除的第一個item
         const shiftItem = this.slideData.shift();
+        console.log('shiftItem',shiftItem)
+        // 把移除的加到最後面
         this.slideData.push(shiftItem);
+        // 註解掉的話只能點一次
         this.setTime();
         return;
       }
       if (slidesToShow < 0) {
+        // 移除最後一個
         const shiftItem = this.slideData.pop();
         this.slideData.unshift(shiftItem);
         this.setTime();
@@ -146,15 +157,15 @@ a {
     opacity: 0;
 }
 
-img{
-  width: 300px;
-  height: 200px;
+.slide-article img{
+  width: 100%;
 }
 
 .slide-article {
   background-color: #eee;
   padding-top: 10px;
-  height: 50%;
+  height: 100%;
+  width: 300px;
   margin: 30px;
   border-radius: 10px;
   box-sizing: border-box;
