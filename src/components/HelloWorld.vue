@@ -1,7 +1,7 @@
 <template>
   <div class="slide">
     <div class="showImg">
-      <img src="" alt="">
+      <img :src="`${welfare[0].title}`" alt="">
     </div>
     <section class="container">
       <div class="row">
@@ -45,9 +45,11 @@ export default {
     for (let i = 0; i < this.welfare.length * 3; i++) {
       let obj = {};
       obj.id = i;
+      // 10%2  10除以2的餘數是什麼
       obj.ref = i % this.welfare.length;
       // console.log('obj',obj)
       this.slideData.push(obj);
+      // console.log('slideData',this.slideData)
     }
   },
   methods: {
@@ -81,10 +83,14 @@ export default {
       //  console.log('slideData',this.slideData)
       if (slidesToShow > 0) {
         // 回傳移除的第一個item
+        console.log('length 前',this.slideData.length)
+        console.log('slideData 前',this.slideData)
         const shiftItem = this.slideData.shift();
-        console.log('shiftItem',shiftItem)
+        // console.log('shiftItem',shiftItem,'   length 後',this.slideData.length)
+      
         // 把移除的加到最後面
         this.slideData.push(shiftItem);
+        // console.log('this.slideData',this.slideData)
         // 註解掉的話只能點一次
         this.setTime();
         return;
