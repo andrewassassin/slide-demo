@@ -123,10 +123,12 @@ export default {
       const ref = this.product.map(item => item.title).indexOf(event.currentTarget.name)
       // 如果我點的圖片ref大於現在置中的圖片，以及我點的圖片在我的右邊
         if(ref > this.focusIndex && index>4 ){
+          console.log('ref',ref)
               this.focusIndex = ref 
               if(index==6){
                 const shiftItem = this.slideData.splice(0,2);
-                  this.slideData.push(shiftItem[0],shiftItem[1]);
+                  this.slideData = this.slideData.concat(shiftItem);
+                  console.log('slideData 6',this.slideData)
                    this.setTime();
                    return;
               }
@@ -154,6 +156,13 @@ export default {
               return;
           }else{
                this.focusIndex = ref 
+                if(index==6){
+                const shiftItem = this.slideData.splice(0,2);
+                  this.slideData = this.slideData.concat(shiftItem);
+                  console.log('slideData 6',this.slideData)
+                   this.setTime();
+                   return;
+              }
               const shiftItem = this.slideData.shift();
               console.log('shiftItem',shiftItem)
 
