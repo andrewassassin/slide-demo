@@ -3,7 +3,7 @@
     <div class="showImg col-md-6 mb-2">
       <img width="400px" height="400px"   :src="`${product[focusIndex].title}`" alt="">
     </div>
-    <section class="col-md-6">
+    <section class="col-md-8">
       <div class="container">
         <div class="row slide-item">
           <transition-group name="flip-list" tag="ul" class="slide-list">
@@ -107,7 +107,7 @@ export default {
 
         const shiftItem = this.slideData.shift();
         console.log('shiftItem',shiftItem)
-
+        console.log('slideData',this.slideData)
         // 把移除的加到最後面
         this.slideData.push(shiftItem);
         // 註解掉的話只能點一次
@@ -116,13 +116,13 @@ export default {
       }
     },
     clickImg(event,index) {
+      console.log('index',index)
       // click 哪張圖就會show哪張
-      console.log('index',event.currentTarget.id)
       console.log('slideData',this.slideData)
       // 直接靠map回傳的title屬性轉成陣列，做indexOf
       const ref = this.product.map(item => item.title).indexOf(event.currentTarget.name)
       // 如果我點的圖片ref大於現在置中的圖片，以及我點的圖片在我的右邊
-        if(ref > this.focusIndex && index>4 ){
+        if(ref > this.focusIndex && index>this.slideData.length/2 ){
           console.log('ref',ref)
               this.focusIndex = ref 
               if(index==6){
@@ -133,8 +133,7 @@ export default {
                    return;
               }
               const shiftItem = this.slideData.shift();
-              console.log('shiftItem',shiftItem)
-
+              
               // 把移除的加到最後面
               this.slideData.push(shiftItem);
               // 註解掉的話只能點一次
@@ -220,7 +219,7 @@ a {
 }
 /* slide */
 .slide {
-  width: 100%;
+  width: 75%;
   overflow: hidden;
 }
 .slide-list {
@@ -232,7 +231,7 @@ a {
 .slide-list li {
   position: relative;
   flex: 1 0 0;
-  left: calc(-100% / 8.5 * 4);
+  left: calc(-100% / 3 * 4);
   opacity: 0.4;
   
 }
@@ -245,8 +244,8 @@ a {
 
 .slide-list li:first-child,
 .slide-list li:last-child{
-   z-index: -1;
-    opacity: 0;
+   z-index: 5;
+    opacity: 1;
 }
 
 .slide-article img{
