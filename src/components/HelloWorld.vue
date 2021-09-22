@@ -1,11 +1,11 @@
 <template>
   <div class="slide">
-    <div class="showImg col-md-6 mb-2">
-      <img width="400px" height="400px"   :src="`${product[focusIndex].title}`" alt="">
+    <div class="showImg col-md-8 mb-2">
+      <img width="400px" height="400px" :src="`${product[focusIndex].title}`" alt="">
     </div>
     <section class="col-md-8">
       <div class="container">
-        <div class="row slide-item">
+        <div class="row slide-item justify-content-center">
           <transition-group name="flip-list" tag="ul" class="slide-list">
             <li v-for="(item,index) in slideData" :key="item.id">
               <article class="slide-article">
@@ -106,8 +106,6 @@ export default {
         }
 
         const shiftItem = this.slideData.shift();
-        console.log('shiftItem',shiftItem)
-        console.log('slideData',this.slideData)
         // 把移除的加到最後面
         this.slideData.push(shiftItem);
         // 註解掉的話只能點一次
@@ -116,62 +114,24 @@ export default {
       }
     },
     clickImg(event,index) {
-      console.log('index',index)
-      // click 哪張圖就會show哪張
-      console.log('slideData',this.slideData)
-      // 直接靠map回傳的title屬性轉成陣列，做indexOf
+      // 直接靠map回傳的title屬性轉成陣列，做indexOf找出點選圖片的ref
       const ref = this.product.map(item => item.title).indexOf(event.currentTarget.name)
-      // 如果我點的圖片ref大於現在置中的圖片，以及我點的圖片在我的右邊
-        if(ref > this.focusIndex && index>this.slideData.length/2 ){
-          console.log('ref',ref)
-              this.focusIndex = ref 
-              if(index==6){
-                const shiftItem = this.slideData.splice(0,2);
-                  this.slideData = this.slideData.concat(shiftItem);
-                  console.log('slideData 6',this.slideData)
-                   this.setTime();
-                   return;
-              }
-              const shiftItem = this.slideData.shift();
-              
-              // 把移除的加到最後面
-              this.slideData.push(shiftItem);
-              // 註解掉的話只能點一次
-              this.setTime();
-        // 如果我點的圖片ref大於現在置中的圖片，但是我點的圖片在我的左邊
-          }else if(ref > this.focusIndex && index<4){
-             this.focusIndex = ref 
-              const shiftItem = this.slideData.pop();
-              this.slideData.unshift(shiftItem);
-              this.setTime();
-              return;
-          }else if(ref < this.focusIndex && index<4){
-              this.focusIndex = ref 
-              const shiftItem = this.slideData.pop();
-              this.slideData.unshift(shiftItem);
-              this.setTime();
-              return;
-          }else if(ref ==  this.focusIndex){
-              return;
+      console.log('index',index)
+      // 如果我點的圖片在我的(中間為4)右邊
+        if(index>4){
+          const needToSlice = index-4
+                this.focusIndex = ref 
+                const shiftItem = this.slideData.splice(0,needToSlice);
+                this.slideData = this.slideData.concat(shiftItem);
+                this.setTime();
+      // 如果我點的圖片在我的左邊
           }else{
-               this.focusIndex = ref 
-                if(index==6){
-                const shiftItem = this.slideData.splice(0,2);
-                  this.slideData = this.slideData.concat(shiftItem);
-                  console.log('slideData 6',this.slideData)
-                   this.setTime();
-                   return;
-              }
-              const shiftItem = this.slideData.shift();
-              console.log('shiftItem',shiftItem)
-
-              // 把移除的加到最後面
-              this.slideData.push(shiftItem);
-              // 註解掉的話只能點一次
-              this.setTime();
+              const needToSlice = -(4-index)
+                this.focusIndex = ref 
+                const shiftItem = this.slideData.splice(needToSlice);
+                this.slideData =[...shiftItem,...this.slideData]
+                this.setTime();
           }
-   
-    
     }
   },
 };
@@ -203,13 +163,13 @@ a {
 
 .slide-prev{
   position: relative;
-  left: -880px;
+  left: -780px;
   bottom: 100px;
 }
 
 .slide-next{
   position: relative;
-  right: 50px;
+  right: -100px;
   bottom: 100px;
 }
 
@@ -219,19 +179,19 @@ a {
 }
 /* slide */
 .slide {
-  width: 75%;
+  width: 100%;
   overflow: hidden;
 }
 .slide-list {
   display: flex;
-  margin: 10px 5px;
-  /* width:60%; */
+  margin: 10px 0px;
+  width:73%;
   overflow: hidden;
 }
 .slide-list li {
   position: relative;
   flex: 1 0 0;
-  left: calc(-100% / 3 * 4);
+  left: calc(-100% / 8 * 5);
   opacity: 0.4;
   
 }
@@ -242,11 +202,14 @@ a {
     }
 
 
-.slide-list li:first-child,
-.slide-list li:last-child{
-   z-index: 5;
-    opacity: 1;
-}
+.slide-list li:nth-child(1),
+.slide-list li:nth-child(2),
+.slide-list li:nth-child(8),
+.slide-list li:nth-child(9)
+{
+   z-index: -2;
+    opacity: 0;
+} 
 
 .slide-article img{
   width: 60%;
@@ -270,6 +233,7 @@ a {
 
 .slide-item{
   margin-top: 20px;
+  margin-right: 20px;
   background-color: #eee;
   /* height: 300px; */
 }
