@@ -116,17 +116,18 @@ export default {
     clickImg(event,index) {
       // 直接靠map回傳的title屬性轉成陣列，做indexOf找出點選圖片的ref
       const ref = this.product.map(item => item.title).indexOf(event.currentTarget.name)
-      console.log('index',index)
+      // 9/2=4.5   取四捨五入為5，但陣列從0開始，故-1
+      const middleImg =  Math.round(this.slideData.length/2)-1
       // 如果我點的圖片在我的(中間為4)右邊
-        if(index>4){
-          const needToSlice = index-4
+        if(index>middleImg){
+          const needToSlice = index-middleImg
                 this.focusIndex = ref 
                 const shiftItem = this.slideData.splice(0,needToSlice);
                 this.slideData = this.slideData.concat(shiftItem);
                 this.setTime();
       // 如果我點的圖片在我的左邊
           }else{
-              const needToSlice = -(4-index)
+              const needToSlice = -(middleImg-index)
                 this.focusIndex = ref 
                 const shiftItem = this.slideData.splice(needToSlice);
                 this.slideData =[...shiftItem,...this.slideData]
@@ -136,7 +137,7 @@ export default {
   },
 };
 </script>
-<style scoped >
+<style scoped>
 h3 {
   margin: 40px 0 0;
 }
