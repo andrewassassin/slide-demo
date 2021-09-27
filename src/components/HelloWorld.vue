@@ -1,20 +1,18 @@
 <template>
   <div class="slide">
-    <div class="showImg col-md-8 mb-2">
-      <img width="400px" height="400px" :src="`${product[focusIndex].title}`" alt="">
+    <div class="showImg col-md-4">
+      <img width="400px" height="400px" :src="`../../static/img/${itemObj[focusIndex]}`" alt="">
     </div>
-    <section class="col-md-8">
-      <div class="container">
-        <div class="row slide-item justify-content-center">
+    <section class="col-md-6"> 
+        <div class="slide-item">
           <transition-group name="flip-list" tag="ul" class="slide-list">
             <li v-for="(item,index) in slideData" :key="item.id">
-              <article class="slide-article">
-                <img :src=" `${ product[item.ref].title }`" :name="`${product[item.ref].title}`" :id="`${index}`"  @click="clickImg($event,index)" alt="">
-              </article>
+            
+                <img :src="`../../static/img/${itemObj[item.ref]}`" :name="`${itemObj[item.ref]}`" :id="`${index}`"  @click="clickImg($event,index)" alt="">
+             
             </li>
           </transition-group>
         </div>
-      </div>
     </section>
      <div class="slide-ctrl">
       <div class="slide-prev" @click="slideCtrl(1)">Prev</div>
@@ -24,49 +22,37 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
       clickWait: false,
       timer: {},
       slideData: [],
-      product: [
-        {
-          // 綠色 =0
-          title: "../../static/img/gallery-image-1.jpg",
-        },
-        {
-          // 黃色 = 1
-          title: "../../static/img/gallery-image-2.jpg",
-        },
-        {
-          // 白色 = 2
-          title: "../../static/img/gallery-image-3.jpg",
-        }
-      ],
+      itemObj:[],
       focusIndex:1
     };
   },
-  mounted() {
-    for (let i = 0; i < this.product.length * 3; i++) {
+  async mounted() {
+     await axios.get("https://x-home.pcpogo.com/homex/product.php?RDEBUG=andrewc")
+          .then(response => {
+              const item = response.data.find(item=>{
+                return item.id == 167
+              })
+              this.itemObj  = JSON.parse(item.image)         
+          })
+          .catch(error => {
+            console.log('err',error);
+          })
+    for (let i = 0; i < this.itemObj.length * 3; i++) {
       let obj = {};
       obj.id = i;
       // 2%10  10除以2的餘數是什麼，在此例 ref = i
-      obj.ref = i % this.product.length;
+      obj.ref = i % this.itemObj.length;
       this.slideData.push(obj);
     }
   },
   methods: {
-    copyData() {
-      const arr = [];
-      for (let i = 0; i < this.product.length * 2; i++) {
-        let obj = {};
-        obj.id = i;
-        obj.ref = i % this.product.length;
-        this.arr.push(obj);
-      }
-      return arr;
-    },
     setTime() {
       this.timer = setTimeout(() => {
         this.clickWait = false;
@@ -115,9 +101,14 @@ export default {
     },
     clickImg(event,index) {
       // 直接靠map回傳的title屬性轉成陣列，做indexOf找出點選圖片的ref
+<<<<<<< Updated upstream
       const ref = this.product.map(item => item.title).indexOf(event.currentTarget.name)
       // 9/2=4.5   取四捨五入為5，但陣列從0開始，故-1
       const middleImg =  Math.round(this.slideData.length/2)-1
+=======
+      const ref = this.itemObj.map(item => item).indexOf(event.currentTarget.name)
+      console.log('index',index)
+>>>>>>> Stashed changes
       // 如果我點的圖片在我的(中間為4)右邊
         if(index>middleImg){
           const needToSlice = index-middleImg
@@ -164,14 +155,14 @@ a {
 
 .slide-prev{
   position: relative;
-  left: -780px;
-  bottom: 100px;
+  left: -880px;
+  bottom: 80px;
 }
 
 .slide-next{
   position: relative;
-  right: -100px;
-  bottom: 100px;
+  right:420px;
+  bottom: 80px;
 }
 
 .slide-prev:hover,
@@ -179,27 +170,26 @@ a {
   color: #ff0;
 }
 /* slide */
-.slide {
-  width: 100%;
-  overflow: hidden;
-}
 .slide-list {
   display: flex;
   margin: 10px 0px;
-  width:73%;
-  overflow: hidden;
+  padding: 5px 0px;
+  width:800px;
+  height: 100px;
+  /* overflow: hidden; */
 }
 .slide-list li {
   position: relative;
   flex: 1 0 0;
-  left: calc(-100% / 8 * 5);
+  left:calc(-100% / 40 * 5);
   opacity: 0.4;
-  
+  margin: 15px;
 }
 
 .slide-list li:nth-child(5) {
       opacity: 1;
       transform: scale(1.3);
+      z-index: 2;
     }
 
 
@@ -208,34 +198,23 @@ a {
 .slide-list li:nth-child(8),
 .slide-list li:nth-child(9)
 {
-   z-index: -2;
+   z-index: 0;
     opacity: 0;
 } 
 
-.slide-article img{
-  width: 60%;
+.slide-list img{
+  width: 100%;
 }
 
-.slide-article {
-  /* position: relative; */
-  background-color: #eee;
-  /* left: 50%; */
-  padding-top: 10px;
-  height: 80%;
-  width: 200px;
-  margin: 20px 0px;
-  border-radius: 10px;
-  box-sizing: border-box;
-  padding: 10px;
-}
 .flip-list-move {
   transition: transform 0.8s;
 }
 
 .slide-item{
+  width: 60%;
   margin-top: 20px;
-  margin-right: 20px;
+  /* margin-right: 40px; */
   background-color: #eee;
-  /* height: 300px; */
+  overflow: hidden;
 }
 </style>

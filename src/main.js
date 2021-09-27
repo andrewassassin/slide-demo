@@ -9,7 +9,7 @@ import 'bootstrap/dist/js/bootstrap.min'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 Vue.use(BootstrapVue)
-
+import axios from 'axios'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
