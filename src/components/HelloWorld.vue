@@ -1,6 +1,6 @@
 <template>
   <div class="slide">
-    <div class="showImg col-md-4">
+    <div class="showImg col-md-5">
       <img width="400px" height="400px" :src="`../../static/img/${itemObj[focusIndex]}`" alt="">
     </div>
     <section class="col-md-6"> 
@@ -151,13 +151,13 @@ a {
 .slide-prev{
   position: relative;
   left: -880px;
-  bottom: 80px;
+  bottom: 120px;
 }
 
 .slide-next{
   position: relative;
-  right:420px;
-  bottom: 80px;
+  right:210px;
+  bottom: 120px;
 }
 
 .slide-prev:hover,
@@ -165,18 +165,25 @@ a {
   color: #ff0;
 }
 /* slide */
+.slide-item{
+  width:80%;
+  height: 163px;
+  margin-top: 20px;
+  background-color: #eee;
+  overflow: hidden;
+}
+
 .slide-list {
   display: flex;
   margin: 10px 0px;
   padding: 5px 0px;
-  width:800px;
   height: 100px;
   /* overflow: hidden; */
 }
 .slide-list li {
   position: relative;
   flex: 1 0 0;
-  left:calc(-100% / 40 * 5);
+  left:calc(-100% /20 * 5);
   opacity: 0.4;
   margin: 15px;
 }
@@ -198,18 +205,12 @@ a {
 } 
 
 .slide-list img{
-  width: 100%;
+  width: 100px;
+  height: 100px;
 }
 
 .flip-list-move {
   transition: transform 0.8s;
 }
 
-.slide-item{
-  width: 60%;
-  margin-top: 20px;
-  /* margin-right: 40px; */
-  background-color: #eee;
-  overflow: hidden;
-}
 </style>
